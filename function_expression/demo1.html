@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			// 函数声明
+			// create a function
+			function sayName() {
+				alert("dd");
+			}
+			// 函数表达式
+			var sayHello = function() {
+				alert("Hello!");
+			}
+			//函数的递归调用
+			/*
+			 * function 阶乘
+			 */
+			function factorial(num) {
+				if (num <= 1) {
+					return 1;
+				} else {
+					return num * arguments.callee(num - 1); //arguments.callee 是一个指向正在执行的函数的指针
+				}
+			}
+			var anotherFactorial = factorial;
+			factorial = null;
+			var res = anotherFactorial(5);
+			console.log(res);
+			// 以上方案 缺陷  在严格模式 不能通过脚本访问 arguments.callee
+			// 因此在可以使用命名函数表达式来代替
+			/*
+			var factorial=(function f(num){
+				if(num<=1){
+					return 1;
+				}else{
+					return num*f(num-1);
+				}
+			});
+			
+			var fac1= factorial;
+			factorial=null;
+			var res=  fac1(3);
+			*/
+			
+		</script>
+		<script src="closure.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+		//数组排序
+		var values=[0,1,5,10,15];
+		//values.sort();
+		//console.log(values); // 0, 1, 10, 15, 5   
+		//sort排序方式 是取得数组中每个元素 tosting 然后进行比较   字符串比较   是 从左开始往右进行比较
+		
+		
+		function compare(val1,val2){
+			if(val1<val2){
+				return -1;
+			}else if(val1>val2){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		
+		values.sort(compare);
+		console.log(values)   // 0, 1, 5, 10, 15
+		
+		//
+		
+		var new_val=values.concat('sas',['as','sas']);  //concat 数组拼接
+		console.log(new_val);
+		
+//		var arr3=new_val.slice(1,4);  //数组分割函数 slice
+		
+		arr3.splice();
+		</script>
+	</body>
+</html>
