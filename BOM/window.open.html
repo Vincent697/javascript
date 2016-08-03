@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<input type="button" id="type1" onclick="openT1()" value="打开新窗口" />
+		<input type="button" id="type1" onclick="myPrint()" value="打印" />
+		<input type="button" id="type1" onclick="myFind()" value="查找" />
+		<input type="button" id="type1" onclick="openT1()" value="打开新窗口" />
+	</body>
+	<script type="text/javascript">
+		function openT1() {
+			window.open("http://www.zhulonghui.com/", "newWindow", 'height=400,width=400,top=100,left=10,resizable=no');
+		}
+			
+		function myFind(){
+			window.find();
+		}
+
+		function myPrint(){
+			window.print();
+		}
+		
+		
+		/*if(confirm("确认要提交吗？")) {
+			alert("提交成功！");
+		} else {
+			alert("提交失败");
+		}
+
+		var reuslt = prompt("请输入用户名：", "");
+
+		if(reuslt !== null) {
+			alert(result);
+		}*/
+	</script>
+
+</html>

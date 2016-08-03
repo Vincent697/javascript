@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<script>
+var w;
+//新建一个窗口
+function openwindow(){
+	w=window.open('','', 'width=100,height=100');
+	w.focus();
+}
+//resizeTo()
+function _resizeTo(){
+	w.resizeTo(500,500);
+	w.focus();
+}
+//resizeBy()
+function _resizeBy(){
+	w.resizeBy(100,300);
+	w.focus();
+}
+
+//关闭一个窗口
+function closeWindow(){
+	prompt("是否要关闭一个窗口？","")
+	w.close();
+}
+
+//使用 resizeTo()和 resizeBy()方法可以调整浏览器窗口的大小。
+//这两个方法都接收两个参数，
+//其中 resizeTo()接收浏览器窗口的新宽度和新高度，
+//而 resizeBy()接收新窗口与原窗口的宽度和高度之差
+</script>
+</head>
+<body>
+
+<button onclick="openwindow()">openwindow</button>
+<button onclick="_resizeTo()">_resizeTo</button>
+<button onclick="closeWindow()">closeWindow</button>
+<button onclick="_resizeBy()">_resizeBy</button>
+</body>
+</html>
