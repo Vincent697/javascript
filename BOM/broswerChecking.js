@@ -1,5 +1,6 @@
 /**
  * author by vincent
+ * date 2016年8月5日
  */
 var client = function() {
     //呈现引擎
