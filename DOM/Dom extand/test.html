@@ -11,8 +11,8 @@
 </head>
 <body>
 <div id="box" class="mybox">
-    
 </div>
+<input type="date" name="">
 <pre>
     Selectors API Level 1 的核心是两个方法： querySelector()和 querySelectorAll()。
 在兼容的浏览器中，可以通过 Document 及的浏览器有 ：
@@ -21,7 +21,6 @@ IE 8+、 Firefox 3.5+、 Safari 3.1+、 Chrome 和 Opera 10+。
 <script type="text/javascript">
     var _box=document.querySelector("#box");
     _box.innerHTML="This text insert by querySelector!";
-
 
     function matchesSelector(element, selector) {
         if (element.matchesSelector) {
@@ -40,8 +39,9 @@ IE 8+、 Firefox 3.5+、 Safari 3.1+、 Chrome 和 Opera 10+。
         //执行操作
         console.log('matche success!');
     }else {
-        console.log('matche failure!');
+        console.log ('matche failure!');
     }
+    
 </script>
 </body>
 </html>
