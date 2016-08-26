@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>自定义数据属性</title>
+</head>
+
+<body>
+    <div id="box" data-position="Province_jx">xxxxxxxxxxx</div>
+    <div id="myDiv" data-appId="12345" data-myname="Nicholas"></div>
+    <script type="text/javascript">
+        var _div = document.getElementById('box');
+        var dataSelf = _div.dataset.position;
+        console.log(dataSelf);
+
+
+        //本例中使用的方法仅用于演示
+        var div = document.getElementById("myDiv");
+        //取得自定义属性的值
+        var appId = div.dataset.appId;
+        var myName = div.dataset.myname;
+        //设置值
+        div.dataset.appId = 23456;
+        div.dataset.myname = "Michael";
+        //有没有"myname"值呢？
+        if (div.dataset.myname) {
+            alert("Hello, " + div.dataset.myname);
+        }
+    </script>
+</body>
+
+</html>
