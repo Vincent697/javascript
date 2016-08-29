@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>简单的事件处理程序</title>
+</head>
+
+<body>
+    <!-- HTML 事件处理程序 -->
+    <!-- <script type="text/javascript">
+    
+        function showMessage(){
+            alert("Hello world!");
+        }
+    </script>
+    <input type="button" value="Click Me" onclick="alert(event.type)" />
+    <br />
+    <input type="button" value="Click Me" onclick="alert(this.value)" /> -->
+
+
+    <!-- <input id="btn" type="button" value="click me!">
+    <script>
+    var mybtn = document.getElementById("btn");
+
+    //DOM 0 级事件处理程序
+    mybtn.onclick = function() {
+        alert(this.value);
+    }
+
+    // 可以删除通过 DOM 0 级方法指定的事件处理程序
+    btn.onclick = null;
+    </script> -->
+
+    <input id="mybtn" type="button" value="DOM2级事件">
+    <script type="text/javascript">
+        var btn=document.getElementById("mybtn");
+        btn.addEventListener("click", function(){
+            alert(this.value);
+        },false);
+    </script>
+
+</body>
+
+</html>
