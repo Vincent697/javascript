@@ -182,3 +182,204 @@ btn.removeEventListener("click", handler, false); //有效！
 大多数情况下，都是将事件处理程序添加到事件流的冒泡阶段，这样可以最大限度地兼容各种浏览器。最好只在需要在事件到达目标之前截获它的时候将事件处理程序添加到捕获阶段。如果不是特别需要，我们不建议在事件捕获阶段注册事件处理程序。
 
 > IE9、 Firefox、 Safari、 Chrome 和 Opera 支持 DOM2 级事件处理程序。
+
+
+
+#### 2.4 IE事件处理程序
+
+IE 实现了与 DOM 中类似的两个方法： attachEvent()和 detachEvent()。这两个方法接受相同
+的两个参数：事件处理程序名称与事件处理程序函数。由于 IE8 及更早版本只支持事件冒泡，所以通过
+attachEvent()添加的事件处理程序都会被添加到冒泡阶段。
+要使用 attachEvent()为按钮添加一个事件处理程序，可以使用以下代码。
+
+```javascript
+var btn = document.getElementById("myBtn");
+btn.attachEvent("onclick", function(){
+    alert("Clicked");
+});
+```
+
+> 注意， attachEvent()的第一个参数是"onclick"，而非 DOM 的 addEventListener()方法中
+的"click"。
+
+在 IE 中使用 attachEvent()与使用 DOM0 级方法的主要区别在于事件处理程序的作用域。在使
+用 DOM0 级方法的情况下，事件处理程序会在其所属元素的作用域内运行；在使用 attachEvent()方
+法的情况下，事件处理程序会在全局作用域中运行，因此 this 等于 window。来看下面的例子。
+
+
+在编写跨浏览器的代码时，牢记这一区别非常重要。
+与 addEventListener()类似， attachEvent()方法也可以用来为一个元素添加多个事件处理程
+序。来看下面的例子。
+
+```javascript
+var btn = document.getElementById("myBtn");
+
+btn.attachEvent("onclick", function(){
+    alert("Clicked");
+});
+
+btn.attachEvent("onclick", function(){
+    alert("Hello world!");
+});
+```
+
+这里调用了两次 attachEvent()，为同一个按钮添加了两个不同的事件处理程序。不过，与 DOM
+方法不同的是，这些事件处理程序不是以添加它们的顺序执行，而是以相反的顺序被触发。单击这个例
+子中的按钮，首先看到的是"Hello world!"，然后才是"Clicked"。
+
+> 支持 IE 事件处理程序的浏览器有 IE 和 Opera。
+
+
+#### 2.5 跨浏览器的事件处理程序
+
+为了以跨浏览器的方式处理事件，不少开发人员会使用能够隔离浏览器差异的 JavaScript 库，还有
+一些开发人员会自己开发最合适的事件处理的方法。自己编写代码其实也不难，只要恰当地使用能力检测即可（能力检测在第 9 章介绍过）。要保证处理事件的代码能在大多数浏览器下一致地运行，只需关
+注冒泡阶段。
+
+代码：-------- EventUtil.js
+
+
+> 它的职责是视情况分别使用 DOM0 级方法、 DOM2 级方法或 IE 方法来添加事件
+
+addHandler()和 removeHandler()没有考虑到所有的浏览器问题，例如在 IE 中的作用域问题。
+不过，使用它们添加和移除事件处理程序还是足够了。此外还要注意， DOM0 级对每个事件只支持一
+个事件处理程序。好在，只支持 DOM0 级的浏览器已经没有那么多了，因此这对你而言应该不是什么
+问题。
+
+
+### 3、事件对象
+
+在触发 DOM 上的某个事件时，会产生一个事件对象 event，这个对象中包含着所有与事件有关的
+信息。包括导致事件的元素、事件的类型以及其他与特定事件相关的信息。例如，鼠标操作导致的事件
+对象中，会包含鼠标位置的信息，而键盘操作导致的事件对象中，会包含与按下的键有关的信息。所有
+浏览器都支持 event 对象，但支持方式不同。
+
+#### 3.1 DOM中的事件对象
+
+兼容DOM 的浏览器会将一个 event 对象传入到事件处理程序中，无论指定事件处理程序时使用什么方法（DOM 0级或DOM 2级），都会传入event 对象。
+
+```javascript
+var btn = document.getElementById("myBtn");
+
+btn.onclick = function(event){
+    alert(event.type); //"click"
+};
+
+btn.addEventListener("click", function(event){
+    alert(event.type); //"click"
+}, false);
+```
+
+event 对象包含与创建它的特定事件有关的属性和方法
+
+bubbles               Boolean       只读        表明事件是否冒泡
+cancelable            Boolean       只读        表明是否可以取消事件的默认行为
+currentTarget         Element       只读        其事件处理程序当前正在处理事件的那个元素
+defaultPrevented      Boolean       只读        为 true 表 示 已 经 调 用 了 preventDefault()
+（DOM3级事件中新增）
+detail                Integer       只读        与事件相关的细节信息
+eventPhase            Integer       只读        调用事件处理程序的阶段： 1表示捕获阶段， 2表
+示“处于目标”， 3表示冒泡阶段
+preventDefault()      Function      只读        取消事件的默认行为。如果cancelable是true，则可以使用这个方法
+stopImmediatePropagation() Function 只读        取消事件的进一步捕获或冒泡，同时阻止任何
+事件处理程序被调用（DOM3级事件中新增）
+stopPropagation()     Function      只读        取消事件的进一步捕获或冒泡。如果bubbles
+为true，则可以使用这个方法
+target                Element       只读        事件的目标
+trusted               Boolean       只读        为true表示事件是浏览器生成的。为false表示事件是由开发人员通过 JavaScript创建的（DOM3级事件中新增）
+type                  String        只读        被触发的事件的类型
+view                  AbstractView  只读        与事件关联的抽象视图。等同于发生事件的window对象
+
+> 在事件处理程序内部，对象this始终等于currentTarget的值，而target则只包含事件的实际目标。如果直接将事件处理程序指定给了目标元素，则 this、 currentTarget 和 target 包含相同的值。
+
+```javascript
+var btn = document.getElementById("myBtn");
+btn.onclick = function(event){
+    alert(event.currentTarget === this); //true
+    alert(event.target === this); //true
+};
+```
+event.preventDefault();   //阻止特定事件的默认行为
+
+event.stopPropagation();  用于立即停止事件在DOM层次中的传播，即取消进一步的事件捕获或冒泡
+
+#### 3.2 IE中的事件对象
+
+在使用 DOM 0 级方法添加事件处理程序时，event对象 作为window 对象的一个属性存在。
+
+使用 attachEvent() 添加的，那么就会有一个 event 对象作为参数被传入事件处理程序函数中
+
+
+cancelBubble Boolean 读/写 默认值为false，但将其设置为true就可以取消事件冒泡（与DOM中
+的stopPropagation()方法的作用相同）
+
+returnValue Boolean 读/写 默认值为true，但将其设置为false就可以取消事件的默认行为（与
+DOM中的preventDefault()方法的作用相同）
+
+srcElement Element 只读 事件的目标（与DOM中的target属性相同）
+
+type String 只读 被触发的事件的类型
+
+因为事件处理程序的作用域是根据指定它的方式来确定的，所以不能认为 this 会始终等于事件目
+标。故而，最好还是使用 event.srcElement 比较保险。例如：
+
+```javascript
+var btn = document.getElementById("myBtn");
+
+btn.onclick = function(){
+    alert(window.event.srcElement === this); //true
+};
+
+btn.attachEvent("onclick", function(event){
+    alert(event.srcElement === this); //false
+});
+```
+
+#### 3.3 跨浏览器的事件对象
+
+虽然 DOM 和 IE 中的 event 对象不同，但基于它们之间的相似性依旧可以拿出跨浏览器的方案来。
+IE 中 event 对象的全部信息和方法 DOM 对象中都有，只不过实现方式不一样。不过，这种对应关系
+让实现两种事件模型之间的映射非常容易。可以对前面介绍的 EventUtil 对象加以增强，添加如下方
+法以求同存异。
+
+代码 ----- EventUtil.js
+
+
+### 4、事件类型
+
+DOM 3 级事件 规定了以下几类事件
+
+- UI (user interface)事件 当用户与页面上的元素交互时触发；
+- 焦点事件，当元素获得或失去焦点时触发；
+- 鼠标事件，当用户通过鼠标在页面上执行操作时触发；
+- 滚轮事件，当使用鼠标滚轮（或类似设备）时触发
+- 文本事件，当在文档中输入文本是触发；
+- 键盘事件，当用户通过键盘在页面上执行操作时触发
+- 合成事件，当为IME(Input Method Editor,输入法编辑器)输入字符时触发;
+- 变动事件（mutation）事件，当底层DOM结构发生变化是触发
+- 变动名称事件，当元素或属性名变动时触发。此类事件已经被废弃，没有任何浏览器实现它们。
+
+#### 4.1 UI事件
+
+（1）load：当页面完全加载后在 window 上面触发，当所有框架都加载完毕时在框架集上面触发，当图像加载完毕时在&lt;img&gt;元素上面触发，或者当嵌入的内容加载完毕时在&lt;object&gt;元素上面触发。
+
+（2）unload：当页面完全卸载后在 window 上面触发，当所有框架都卸载后在框架集上面触发，或者当嵌入的内容卸载完毕后在&lt;object&gt;元素上面触发。
+
+（3）abort：在用户停止下载过程时，如果嵌入的内容没有加载完，则在&lt;object&gt;元素上面触发。
+
+（4）error：当发生 JavaScript 错误时在 window 上面触发，当无法加载图像时在&lt;img&gt;元素上面触发，当无法加载嵌入内容时在&lt;object&gt;元素上面触发，或者当有一或多个框架无法加载时在框架集上面触发。第 17章将继续讨论这个事件。
+
+（5）select：当用户选择文本框（&lt;input&gt;或&lt;texterea&gt;）中的一或多个字符时触发。第 14 章将
+继续讨论这个事件。
+
+（6）resize：当窗口或框架的大小变化时在 window 或框架上面触发。
+
+（7）scroll：当用户滚动带滚动条的元素中的内容时，在该元素上面触发。 &lt;body&gt;元素中包含所加
+载页面的滚动条。
+
+> 要确认浏览器是否支持DOM2级事件规定的HTML事件，可以使用下面的代码
+var isSupported = document.implementation.hasFeature("HTMLEvents", "2.0");
+//要确定浏览器是否支持“ DOM3 级事件”定义的事件
+var isSupported = document.implementation.hasFeature("UIEvent", "3.0");
+
+> 根据“ DOM2 级事件”规范，应该在 document 而非 window 上面触发 load 事件。但是，所有浏览器都在 window 上面实现了该事件，以确保向后兼容。

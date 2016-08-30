@@ -32,14 +32,22 @@
     btn.onclick = null;
     </script> -->
 
-    <input id="mybtn" type="button" value="DOM2级事件">
+  <!--   <input id="mybtn" type="button" value="DOM2级事件">
     <script type="text/javascript">
         var btn=document.getElementById("mybtn");
         btn.addEventListener("click", function(){
             alert(this.value);
         },false);
-    </script>
+    </script> -->
+    
 
+    <!-- resize 事件 -->
+    <script type="text/javascript">
+        window.addEventListener("resize",function(){
+            //console.log("窗口改变了！");
+            alert("窗口改变了！");
+        },false);
+    </script>
 </body>
 
 </html>
