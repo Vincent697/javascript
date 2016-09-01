@@ -7,6 +7,54 @@
 </head>
 
 <body>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
+    <p>wqwqr</p>
     <!-- HTML 事件处理程序 -->
     <!-- <script type="text/javascript">
     
@@ -17,8 +65,6 @@
     <input type="button" value="Click Me" onclick="alert(event.type)" />
     <br />
     <input type="button" value="Click Me" onclick="alert(this.value)" /> -->
-
-
     <!-- <input id="btn" type="button" value="click me!">
     <script>
     var mybtn = document.getElementById("btn");
@@ -31,22 +77,43 @@
     // 可以删除通过 DOM 0 级方法指定的事件处理程序
     btn.onclick = null;
     </script> -->
-
-  <!--   <input id="mybtn" type="button" value="DOM2级事件">
+    <!--   <input id="mybtn" type="button" value="DOM2级事件">
     <script type="text/javascript">
         var btn=document.getElementById("mybtn");
         btn.addEventListener("click", function(){
             alert(this.value);
         },false);
     </script> -->
-    
-
     <!-- resize 事件 -->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
+    if(window.addEventListener){
+
         window.addEventListener("resize",function(){
             //console.log("窗口改变了！");
             alert("窗口改变了！");
         },false);
+    }else{
+          window.attachEvent("onresize",function(event){
+            alert("IE 我变了！");
+        })
+    }
+    </script> -->
+    <!-- scroll 事件 -->
+    <script type="text/javascript" src="EventUtil.js"></script>
+    <script type="text/javascript">
+    // window.onscroll = function() {
+    //     //console.log(document.documentElement.scrollTop || document.body.scrollTop);
+    // }
+
+    (function() {
+        function handleMouseWheel(event) {
+            event = EventUtil.getEvent(event);
+            var delta = EventUtil.getWheelDelta(event);
+            console.log(delta);
+        }
+        EventUtil.addHandler(document, "mousewheel", handleMouseWheel);
+        EventUtil.addHandler(document, "DOMMouseScroll", handleMouseWheel); //firefox
+    })();
     </script>
 </body>
 

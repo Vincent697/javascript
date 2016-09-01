@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    #box {
+        height: 20px;
+        width: 50px;
+        border: 1px red solid;
+    }
+    </style>
+</head>
+
+<body>
+    <button onclick="alert('Hello')" value="hashd">click</button>
+    <button ondblclick="alert('Hello')" value="asas">dbclick</button>
+
+    <input id="myinput" type="text" name="city">
+    <div id="box"></div>
+    <script type="text/javascript" src="EventUtil.js"></script>
+    <script type="text/javascript">
+        var box = document.getElementById("box");
+
+        box.onmousedown = function() {
+            //alert("mousedown");
+        }
+        box.onmouseup = function() {
+            alert("mouseup");
+        }
+        var _text=document.getElementById("myinput");
+
+        // _text.addEventListener("keypress",function(event){   //textInput  属于DOM3 级事件
+        //     var res=String.fromCharCode(event.keyCode);
+        //     console.log(res);
+
+        //     if(res==="s"){
+        //         event.preventDefault();
+
+        //     }
+        // },false);
+        EventUtil.addHandler(_text,"keypress",function(event){   //textInput  属于DOM3 级事件
+            event=event||window.event;
+            var res=String.fromCharCode(EventUtil.getCharCode(event));
+            console.log(res);
+            if(res==="s"){
+                EventUtil.preventDefault(event);
+                alert("非法字符")
+            }
+        });
+    </script>
+</body>
+
+</html>

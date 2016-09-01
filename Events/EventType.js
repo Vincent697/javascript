@@ -72,3 +72,15 @@ EventUtil.addHandler(window, "resize", function(event) {
     alert("Resized");
 });
 
+// 4、scroll 事件
+// 虽然 scroll 事件是在 window 对象上发生的，但它实际表示的则是页面中相应元素的变化。在混
+// 杂模式下，可以通过<body>元素的 scrollLeft 和 scrollTop 来监控到这一变化；而在标准模式下，
+// 除 Safari 之外的所有浏览器都会通过<html>元素来反映这一变化（Safari 仍然基于<body>跟踪滚动位
+// 置），如下面的例子所示：
+EventUtil.addHandler(window, "scroll", function(event) {
+    if (document.compatMode == "CSS1Compat") {
+        alert(document.documentElement.scrollTop);
+    } else {
+        alert(document.body.scrollTop);
+    }
+});

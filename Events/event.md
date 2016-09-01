@@ -369,13 +369,11 @@ DOM 3 级事件 规定了以下几类事件
 
 （4）error：当发生 JavaScript 错误时在 window 上面触发，当无法加载图像时在&lt;img&gt;元素上面触发，当无法加载嵌入内容时在&lt;object&gt;元素上面触发，或者当有一或多个框架无法加载时在框架集上面触发。第 17章将继续讨论这个事件。
 
-（5）select：当用户选择文本框（&lt;input&gt;或&lt;texterea&gt;）中的一或多个字符时触发。第 14 章将
-继续讨论这个事件。
+（5）select：当用户选择文本框（&lt;input&gt;或&lt;texterea&gt;）中的一或多个字符时触发。第 14 章将继续讨论这个事件。
 
 （6）resize：当窗口或框架的大小变化时在 window 或框架上面触发。
 
-（7）scroll：当用户滚动带滚动条的元素中的内容时，在该元素上面触发。 &lt;body&gt;元素中包含所加
-载页面的滚动条。
+（7）scroll：当用户滚动带滚动条的元素中的内容时，在该元素上面触发。 &lt;body&gt;元素中包含所加载页面的滚动条。
 
 > 要确认浏览器是否支持DOM2级事件规定的HTML事件，可以使用下面的代码
 var isSupported = document.implementation.hasFeature("HTMLEvents", "2.0");
@@ -383,3 +381,240 @@ var isSupported = document.implementation.hasFeature("HTMLEvents", "2.0");
 var isSupported = document.implementation.hasFeature("UIEvent", "3.0");
 
 > 根据“ DOM2 级事件”规范，应该在 document 而非 window 上面触发 load 事件。但是，所有浏览器都在 window 上面实现了该事件，以确保向后兼容。
+
+#### 4.2 焦点事件
+
+焦点事件会在页面元素获得或失去焦点时触发。利用这些事件并与 document.hasFocus()方法及document.activeElement 属性配合，可以知晓用户在页面上的行踪。有以下 6 个焦点事件。
+
+- blur 在元素失去焦点时触发, 这个事件不会冒泡
+- DOMFocusIn 在元素获得焦点时触发，与html事件的focus等价，但它冒泡。只有Opera支持这个事件，DOM3级事件废弃了DOMFocusIn，选择了focusin。
+- DOMFocusOut 在元素失去焦点时触发 只有Opera支持这个事件，DOM3级事件废弃了DOMFocusOut，选择了focusout。
+- focus 在元素获得焦点时触发。但这个事件不会冒泡;
+- focusin 在元素获得焦点时触发。这个事件会冒泡;
+- focusout 在元素失去焦点时触发 ，这个事件是 HTML 事件 blur 的通用版本
+
+当焦点从页面中的一个元素移动到另一个元素，会依次触发下列事件：
+(1) focusout 在失去焦点的元素上触发；
+(2) focusin 在获得焦点的元素上触发；
+(3) blur 在失去焦点的元素上触发；
+(4) DOMFocusOut 在失去焦点的元素上触发；
+(5) focus 在获得焦点的元素上触发；
+(6) DOMFocusIn 在获得焦点的元素上触发。
+
+其中， blur、 DOMFocusOut 和 focusout 的事件目标是失去焦点的元素；而 focus、 DOMFocusIn
+和 focusin 的事件目标是获得焦点的元素。
+
+#### 4.3 鼠标与滚轮事件
+
+DOM3级事件中定义了 9 个鼠标事件
+
+(1) click : 在用户单击主鼠标按钮（左键）或者按下回车键时触发，这一点对确保易访问性很重要，意味着onclick事件处理程序既可以通过键盘也可以通过鼠标执行。
+
+(2) dbclick : 在用户双击主鼠标按钮（左键）时触发。
+
+(3) mousedown : 再用户按下了任意鼠标按钮时触发.
+
+(4) mouseenter : 在鼠标光标从元素外部首次移动到元素范围之内时触发。不冒泡，而且在光标移动到后代元素上不会触发。
+
+(5) mouseleave : 在位于元素上方的鼠标光标移动到元素范围之外时触发，不冒泡
+
+(6) mousemove : 当鼠标指针在元素内部移动时重复地触发
+
+(7) mouseout : 在鼠标指针位于一个元素上方，然后用户将其移入另一个元素时触发。又移入的另一个元素可能位于前一个元素的外部，也可能是这个元素的子元素。不能通过键盘触发这个事件。
+
+(8) mouseover：在鼠标指针位于一个元素外部，然后用户将其首次移入另一个元素边界之内时触发。不能通过键盘触发这个事件。
+
+(9) mouseup：在用户释放鼠标按钮时触发。不能通过键盘触发这个事件。
+
+
+只有在同一个元素上相继触发 mousedown 和 mouseup 事件，才会触发 click 事件；如果mousedown 或 mouseup 中的一个被取消，就不会触发 click 事件。类似地，只有触发两次 click 事件，才会触发一次 dblclick 事件。如果有代码阻止了连续两次触发 click 事件（可能是直接取消 click事件，也可能通过取消 mousedown 或 mouseup 间接实现），那么就不会触发 dblclick 事件了。
+
+这 4个事件触发的顺序始终如下：
+(1) mousedown
+(2) mouseup
+(3) click
+(4) mousedown
+(5) mouseup
+(6) click
+(7) dblclick
+
+显然， click 和 dblclick 事件都会依赖于其他先行事件的触发；而 mousedown 和 mouseup 则不受其他事件的影响。
+
+鼠标还有一类鼠标滚轮事件 ，其实就是一个mousewheel事件。这个事件跟踪鼠标滚轮，类似于Mac 的触控板。
+
+=== 客户区坐标位置
+
+这个位置信息保存在事件对象的 clientX 和 clientY 属性中，它们的值表示事件发生在鼠标指针在视口中的水平和垂直坐标。
+
+可以使用类似下列代码取得鼠标事件的客户端坐标信息：
+
+```javascript
+var div = document.getElementById("myDiv");
+EventUtil.addHandler(div, "click", function(event){
+    event = EventUtil.getEvent(event);
+    alert("Client coordinates: " + event.clientX + "," + event.clientY);
+});
+```
+
+=== 页面坐标位置
+
+页面坐标通过事件对象的 pageX 和pageY 属性
+
+以下代码可以取得鼠标事件在页面中的坐标：
+
+```javascript
+var div = document.getElementById("myDiv");
+EventUtil.addHandler(div, "click", function(event){
+    event = EventUtil.getEvent(event);
+    alert("Page coordinates: " + event.pageX + "," + event.pageY);
+});
+```
+
+IE8 及更早版本不支持事件对象上的页面坐标，不过使用客户区坐标和滚动信息可以计算出来。这
+时候需要用到 document.body（混杂模式）或 document.documentElement（标准模式）中的
+scrollLeft 和 scrollTop 属性。计算过程如下所示：
+
+```javascript
+var div = document.getElementById("myDiv");
+EventUtil.addHandler(div, "click", function(event){
+    event = EventUtil.getEvent(event);
+    var pageX = event.pageX,
+    pageY = event.pageY;
+    if (pageX === undefined){
+        pageX = event.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft);
+    }
+    if (pageY === undefined){
+        pageY = event.clientY + (document.body.scrollTop || document.documentElement.scrollTop);
+    }
+    alert("Page coordinates: " + pageX + "," + pageY);
+});
+```
+=== 屏幕坐标位置
+
+鼠标事件发生时，不仅会有相对于浏览器窗口的位置，还有一个相对于整个电脑屏幕的位置。
+通过 screenX 和 screenY 属性 可以确定鼠标事件发生时鼠标指针相对于整个屏幕的坐标信息
+
+可以使用类似下面的代码取得鼠标事件的屏幕坐标：
+
+```javascript
+var div = document.getElementById("myDiv");
+EventUtil.addHandler(div, "click", function(event){
+    event = EventUtil.getEvent(event);
+    alert("Screen coordinates: " + event.screenX + "," + event.screenY);
+});
+```
+
+=== 鼠标滚轮事件
+
+IE 6.0 首先实现了 mousewheel 事件。这个事件可以在任何元素上触发，最终会冒泡到 document（IE8）或 window对象。
+
+当用户向前滚动鼠标滚轮时， wheelDelta 是 120 的倍数；当用
+户向后滚动鼠标滚轮时， wheelDelta 是120 的倍数。
+
+有一点要注意：在 Opera 9.5 之前的版本中， wheelDelta 值的正负号是颠倒的。如果你打算支持
+早期的 Opera 版本，就需要使用浏览器检测技术来确定实际的值，如下面的例子所示。
+
+Firefox 支持一个名为 DOMMouseScroll 的类似事件，也是在鼠标滚轮滚动时触发。与 mousewheel
+事件一样， DOMMouseScroll 也被视为鼠标事件，因而包含与鼠标事件有关的所有属性。而有关鼠标滚
+轮的信息则保存在 detail 属性中，当向前滚动鼠标滚轮时，这个属性的值是-3 的倍数，当向后滚动
+鼠标滚轮时，这个属性的值是 3 的倍数。
+
+
+=== 触摸设备
+
+- 不支持 dblclick 事件
+- 轻击可单击元素会触发 mousemove 事件
+- mousemove 事件也会触发 mouseover 和 mouseout 事件。
+- 两个手指放在屏幕上且页面随手指移动而滚动时会触发 mousewheel 和 scroll 事件。
+
+#### 4.4 键盘与文本事件
+
+“ DOM3 级事件”为键盘事件制定了规范， IE9 率先完全实现了该规范。其他浏览器也在着手实现这一标准，但仍然有很多遗留的问题。
+
+有3个键盘事件
+
+- keydown：当用户按下键盘上的任意键时触发，而且如果按住不放的话，会重复触发此事件。
+
+- keypress：当用户按下键盘上的字符键时触发，而且如果按住不放的话，会重复触发此事件。按下 Esc键也会触发这个事件。Safari 3.1 之前的版本也会在用户按下非字符键时触发 keypress事件。
+
+- keyup：当用户释放键盘上的键时触发。
+
+只有一个文本事件：textInput这个事件是对keypress的补充，用意是在将文本显示给用户之前更容易拦截文本。在文本插入文本框之前会触发 textInput 事件。
+
+== 键码
+event.keyCode 属性中会包含一个代码
+
+常见的keyCode 键码
+
+退格（Backspace） 8 
+制表（Tab） 9 
+回车（Enter） 13 
+上档（Shift） 16 
+控制（Ctrl） 17 
+Alt 18
+大写锁定（Caps Lock） 20
+退出（Esc） 27
+上翻页（Page Up） 33
+下翻页（Page Down） 34
+
+无论 keydown 或 keyup 事件都会存在的一些特殊情况。在 Firefox 和 Opera 中，按分号键时 keyCode
+值为 59，也就是 ASCII 中分号的编码；但 IE 和 Safari 返回 186，即键盘中按键的键码。
+
+=== 字符编码
+
+IE9、 Firefox、 Chrome 和 Safari 的 event 对象都支持一个 charCode 属性，这个属性只有在发生
+keypress 事件时才包含值，而且这个值是按下的那个键所代表字符的 ASCII 编码。此时的 keyCode
+通常等于 0 或者也可能等于所按键的键码。IE8 及之前版本和 Opera 则是在 keyCode 中保存字符的 ASCII
+编码。
+
+function getCharCode(event){
+    if (typeof event.charCode == "number"){
+        return event.charCode;
+    } else {
+        return event.keyCode;
+    }
+}
+
+在取得了字符编码之后，就可以使用 String.fromCharCode()将其转换成实际的字符。
+
+=== DOM 3 级变化
+
+DOM 3 级事件中的键盘事件，不再包含 charcode 属性，而是包含了两个新属性  key 和 char
+
+key 属性是为了取代keycode ,它的值是一个字符串，当按下某个字符键时，key的值就是相应的文本字符（如：k 或者 M）
+按下非字符键时 key的值是相应的键名（如： shift、Down）
+
+DOM3 级事件还添加了一个名为 location 的属性，这是一个数值，表示按下了什么位置上的键：
+0 表示默认键盘， 1 表示左侧位置（例如左位的 Alt 键）， 2 表示右侧位置（例如右侧的 Shift 键）， 3 表示
+数字小键盘， 4 表示移动设备键盘（也就是虚拟键盘）， 5 表示手柄（如任天堂 Wii 控制器）。 IE9 支持这
+个属性。 
+
+=== textInput 事件
+
+“ DOM3 级事件”规范中引入了一个新事件，名叫 textInput。根据规范，当用户在可编辑区域中输入字符时，就会触发这个事件。这个用于替代keypress的textInput事件的行为稍有不同。区别之一就是任何可以获得焦点的元素都可以触发keypress事件，但只有可编辑区域才能触发 textInput事件。区别之二是 textInput 事件只会在用户按下能够输入实际字符的键时才会被触发，而keypress事件则在按下那些能够影响文本显示的键时也会触发（例如退格键）。
+
+由于textInput事件主要考虑的是字符，因此它的event对象中还包含一个data属性，这个属性的值就是用户输入的字符
+
+另外， event 对象上还有一个属性，叫 inputMethod，表示把文本输入到文本框中的方式。
+
+> 0，表示浏览器不确定是怎么输入的。
+1，表示是使用键盘输入的。
+2，表示文本是粘贴进来的。
+3，表示文本是拖放进来的。
+4，表示文本是使用 IME 输入的。
+5，表示文本是通过在表单中选择某一项输入的。
+6，表示文本是通过手写输入的（比如使用手写笔）。
+7，表示文本是通过语音输入的。
+8，表示文本是通过几种方法组合输入的。
+9，表示文本是通过脚本输入的。
+
+#### 4.5 复合事件（composition event）
+
+#### 4.6 变动事件
+
+DOM2 级的变动（mutation）事件能在 DOM 中的某一部分发生变化时给出提示。变动事件是为 XML
+或 HTML DOM 设计的，并不特定于某种语言。
+
+1、删除节点，2、插入节点
+
+#### 4.7 HTML5 事件

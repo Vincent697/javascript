@@ -32,7 +32,7 @@ var btn2=document.getElementById("mybtn2");
 
 var handler2=function(event){
     
-    switch (event) {
+    switch (event.type) {
         case "click":
             // statements_1
             alert("clciked");
