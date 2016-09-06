@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>测试 orientation</title>
+    <!-- <script type="text/javascript" src="EventUtil.js"></script> -->
+</head>
+
+<body>
+<div id="myDiv"></div>
+    <script type="text/javascript">
+    // EventUtil.addHandler(window, "load", function(event) {
+    //     var div = document.getElementById("myDiv");
+    //     div.innerHTML = "Current orientation is " + window.orientation;
+    //     EventUtil.addHandler(window, "orientationchange", function(event) {
+    //         div.innerHTML = "Current orientation is " + window.orientation;
+    //     });
+    // });
+    window.addEventListener("load",function (event) {
+         /* body... */
+         var div=document.getElementById("myDiv");
+         div.innerHTML="Current orientation is : "+window.orientation;
+
+         window.addEventListener("orientationchange",function (event) {
+              /* body... */ 
+               div.innerHTML = "Current orientation is " + window.orientation;
+         },false) 
+    },false);
+    </script>
+</body>
+
+</html>

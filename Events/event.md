@@ -618,3 +618,135 @@ DOM2 级的变动（mutation）事件能在 DOM 中的某一部分发生变化�
 1、删除节点，2、插入节点
 
 #### 4.7 HTML5 事件
+
+1、contextmenu 事件
+
+由于 contextmenu 事件是冒泡的，因此可以为 document 指定一个事件处理程序，用以处理页面
+中发生的所有此类事件。这个事件的目标是发生用户操作的元素。在所有浏览器中都可以取消这个事件：
+在兼容 DOM 的浏览器中，使用 event.preventDefalut()；在 IE 中，将 event.returnValue 的值
+设置为 false。因为 contextmenu 事件属于鼠标事件，所以其事件对象中包含与光标位置有关的所有
+属性。通常使用 contextmenu 事件来显示自定义的上下文菜单，而使用 onclick 事件处理程序来隐
+藏该菜单。
+
+>可以用来模拟鼠标右键事件
+
+2、beforeunload 事件
+
+之所以有发生在 window 对象上的 beforeunload 事件，是为了让开发人员有可能在页面卸载前
+阻止这一操作。这个事件会在浏览器卸载页面之前触发，可以通过它来取消卸载并继续使用原有页面。
+但是，不能彻底取消这个事件，因为那就相当于让用户无法离开当前页面了
+
+为了显示这个弹出对话框，必须将 event.returnValue 的值设置为要显示给用户的字符串（对
+IE 及 Fiefox 而言），同时作为函数的值返回（对 Safari 和 Chrome 而言） ，如下面的例子所示。
+
+3、DOMContentLoaded 事件
+
+ window 的 load 事件会在页面中的一切都加载完毕时触发，但这个过程可能会因为要
+加载的外部资源过多而颇费周折。而 DOMContentLoaded 事件则在形成完整的 DOM 树之后就会触发，
+不理会图像、 JavaScript 文件、 CSS 文件或其他资源是否已经下载完毕。与 load 事件不同，
+DOMContentLoaded 支持在页面下载的早期添加事件处理程序，这也就意味着用户能够尽早地与页面
+进行交互。
+
+4、readystatechange 事件
+
+IE为DOM 文档中的某些部分文档提供了 readystatechange 事件。 这个事件的目的是提供与文档或元素的加载状态有关的信息，但这个事件的行为有时候也很难预料。支持readystatechange 事件的每个对象都有一个readyState 属性。
+
+uninitialized 未初始化 对象存在但尚未初始化
+loading  正在加载 对象正在加载数据
+loaded 加载完毕 对象加载数据完成
+interactive 交互   可以操作对象了 但还没有完全加载
+complete 完成  对象已经加载完毕
+
+
+#### 4.8 设备事件
+
+1、orientationchange 事件  （移动设备的方向事件  - orientation-方向）
+
+移动 safari 的 window.orientation 属性 中可能包含3个值：
+0   表示肖像模式
+90  表示向左旋转的横向模式（主屏幕 按钮在右侧）
+-90 表示向右旋转的横向模式 （主屏幕 按钮在左侧）
+（如图 3-10）
+
+2、MozOrientation 事件
+
+Firefox 3.6 为检测设备的方向引入了一个名为 MozOrientation 的新事件。（前缀 Moz 表示这是特
+定于浏览器开发商的事件，不是标准事件。）当设备的加速计检测到设备方向改变时，就会触发这个事
+件。但这个事件与 iOS 中的 orientationchange 事件不同，该事件只能提供一个平面的方向变化。
+
+此时的 event 对象包含三个属性： x、 y 和 z。这几个属性的值都介于 1 到-1 之间，表示不同坐标
+轴上的方向。在静止状态下， x 值为 0， y 值为 0， z 值为 1（表示设备处于竖直状态）。如果设备向右倾
+斜， x 值会减小；反之，向左倾斜， x 值会增大。类似地，如果设备向远离用户的方向倾斜， y 值会减
+小，向接近用户的方向倾斜， y 值会增大。 z 轴检测垂直加速度度， 1 表示静止不动，在设备移动时值
+会减小。（失重状态下值为 0。）
+
+```javascript
+EventUtil.addHandler(window, "MozOrientation", function(event){
+    var output = document.getElementById("output");
+    output.innerHTML = "X=" + event.x + ", Y=" + event.y + ", Z=" + event.z +"<br>";
+});
+```
+
+>只有带加速计的设备才支持 MozOrientation 事件，包括 Macbook、 Lenovo Thinkpad、 Windows
+Mobile 和 Android 设备。请大家注意，这是一个实验性 API，将来可能会变（可能会被其他事件取代）
+
+3、 deviceorientation 事件
+
+本质上，DeviceOrientation Event 规范定义的 deviceorientation 事件与 MozOrientation 事件类似。
+它也是在加速计检测到设备方向变化时在 window 对象上触发，而且具有与 MozOrientation 事件
+相同的支持限制。不过， deviceorientation 事件的意图是告诉开发人员设备在空间中朝向哪儿，而
+不是如何移动。
+
+设备在三维空间中是靠 x、 y 和 z 轴来定位的。当设备静止放在水平表面上时，这三个值都是 0。 x
+轴方向是从左往右， y 轴方向是从下往上， z 轴方向是从后往前（参见图 13-11）。
+
+触发 deviceorientation 事件时 事件对象中包含着变化的信息  事件对象包含以下5个属性
+
+alpha：在围绕 z 轴旋转时（即左右旋转时）， y 轴的度数差；是一个介于 0 到 360 之间的浮点数。
+beta：在围绕 x 轴旋转时（即前后旋转时） ， z 轴的度数差；是一个介于180 到 180 之间的浮点数。
+gamma：在围绕 y 轴旋转时（即扭转设备时） ， z 轴的度数差；是一个介于90 到 90 之间的浮点数。
+absolute：布尔值，表示设备是否返回一个绝对值。
+compassCalibrated：布尔值，表示设备的指南针是否校准过。
+
+4、devicemotion 事件
+
+DeviceOrientation Event 规范还定义了一个 devicemotion 事件。这个事件是要告诉开发人员设备什么时候移动。而不仅仅是设备方向如何改变，例如，通过devicemotion能够检测设备是不是正在往下掉，或者是不是被走着的人拿在手里
+
+触发devicemotion 事件时，事件对象包含以下属性
+
+acceleration : 一个包含x、y、z 属性的对象，在不考虑重力的情况下，告诉你在每个方向上的加速度
+
+accelerationIncludingGravity：一个包含 x、 y 和 z 属性的对象，在考虑 z 轴自然重力加
+速度的情况下，告诉你在每个方向上的加速度。
+
+interval：以毫秒表示的时间值，必须在另一个 devicemotion 事件触发前传入。这个值在每
+个事件中应该是一个常量。
+
+rotationRate：一个包含表示方向的 alpha、 beta 和 gamma 属性的对象。
+
+如果读取不到 acceleration、 accelerationIncludingGravity 和 rotationRate 值，则它们
+的值为 null。因此，在使用这三个属性之前，应该先检测确定它们的值不是 null。
+
+```javascript
+EventUtil.addHandler(window, "devicemotion", function(event){
+    var output = document.getElementById("output");
+    if (event.rotationRate !== null){
+        output.innerHTML += "Alpha=" + event.rotationRate.alpha + ", Beta=" +
+        event.rotationRate.beta + ", Gamma=" +
+        event.rotationRate.gamma;
+    }
+});
+```
+
+与 deviceorientation 事件类似，只有 iOS 4.2+中的 Safari、 Chrome 和 Android 版 WebKit 实现了devicemotion 事件。
+
+#### 4.9 触摸与手势事件 （Touch Events ）
+
+##### 1、触摸事件
+
+触摸事件会在用户手指放在屏幕上面时、在屏幕上滑动或从屏幕上移开时触发
+
+- （1）touchstart：当手指触摸屏幕时触发；即使已经有一个手指放在了屏幕上也会触发。
+- （2）touchmove：当手指在屏幕上滑动时连续地触发。在这个事件发生期间，调用 preventDefault()可以阻止滚动。
+- （3）touchend：当手指从屏幕上移开时触发。
+- （4）touchcancel：当系统停止跟踪触摸时触发。关于此事件的确切触发时间，文档中没有明确说明。
