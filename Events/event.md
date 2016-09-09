@@ -750,3 +750,94 @@ EventUtil.addHandler(window, "devicemotion", function(event){
 - （2）touchmove：当手指在屏幕上滑动时连续地触发。在这个事件发生期间，调用 preventDefault()可以阻止滚动。
 - （3）touchend：当手指从屏幕上移开时触发。
 - （4）touchcancel：当系统停止跟踪触摸时触发。关于此事件的确切触发时间，文档中没有明确说明。
+
+以上事件都都会冒泡，都可以取消
+
+因此，每个触摸事件的 event 对象都提供了在鼠标事件中常见的属性：
+bubbles、cancelable、view、clientX、clientY、screenX、screenY、detail、altKey、shiftKey、ctrlKey 和 metaKey。
+
+除了常见的 DOM 属性外，触摸事件还包含下列三个用于跟踪触摸的属性。
+touches：表示当前跟踪的触摸操作的 Touch 对象的数组。
+targetTouchs：特定于事件目标的 Touch 对象的数组。
+changeTouches：表示自上次触摸以来发生了什么改变的 Touch 对象的数组。
+
+每个 Touch 对象包含下列属性。
+
+clientX：触摸目标在视口中的 x 坐标。
+clientY：触摸目标在视口中的 y 坐标。
+identifier：标识触摸的唯一 ID。
+pageX：触摸目标在页面中的 x 坐标。
+pageY：触摸目标在页面中的 y 坐标。
+screenX：触摸目标在屏幕中的 x 坐标。
+screenY：触摸目标在屏幕中的 y 坐标。
+target：触摸的 DOM 节点目标
+
+
+##### 2、手势事件
+
+iOS 2.0 中的 Safari 还引入了一组手势事件。当两个手指触摸屏幕时就会产生手势，手势通常会改变
+显示项的大小，或者旋转显示项。有三个手势事件，分别介绍如下。
+ - gesturestart：当一个手指已经按在屏幕上而另一个手指又触摸屏幕时触发。
+ - gesturechange：当触摸屏幕的任何一个手指的位置发生变化时触发。
+ - gestureend：当任何一个手指从屏幕上面移开时触发。
+
+ 触发 gestureend 事件，紧接着又会触发基于该手指的 touchend 事件。
+与触摸事件一样，每个手势事件的 event 对象都包含着标准的鼠标事件属性： bubbles、
+cancelable、 view、 clientX、 clientY、 screenX、 screenY、 detail、 altKey、 shiftKey、
+ctrlKey 和 metaKey。
+
+此外，还包含两个额外的属性： rotation 和 scale。
+其中， rotation 属性表示手指变化引起的旋转角度，负值表示逆时针旋转，正值表示顺时针旋转（该值从 0 开始）。而 scale
+属性表示两个手指间距离的变化情况（例如向内收缩会缩短距离）；这个值从 1 开始，并随距离拉大而
+增长，随距离缩短而减小。
+
+
+### 5、内存和性能
+
+利用好事件处理程序，能够提升性能
+
+#### 5.1 事件委托
+
+对事件处理程序过多的解决方案就是“事件委托”。事件委托利用了事件冒泡。只指定一个事件处理程序，就可以管理某一类型的所有事件。
+
+
+使用事件委托吗，只需在DOM树种尽量最高的层次上添加一个事件处理程序
+
+```javascript
+var list = document.getElementById("myLinks");
+EventUtil.addHandler(list, "click", function(event){
+    event = EventUtil.getEvent(event);
+    var target = EventUtil.getTarget(event);
+    switch(target.id){
+        case "doSomething":
+            document.title = "I changed the document's title";
+            break;
+        case "goSomewhere":
+            location.href = "http://www.wrox.com";
+            break;
+        case "sayHi":
+            alert("hi");
+            break;
+    }
+});
+```
+
+#### 5.2 移除事件处理程序
+
+```html
+<div id="myDiv">
+    <input type="button" value="Click Me" id="myBtn">
+</div>
+<script type="text/javascript">
+var btn = document.getElementById("myBtn");
+btn.onclick = function(){
+    //先执行某些操作
+    btn.onclick = null; //移除事件处理程序
+    document.getElementById("myDiv").innerHTML = "Processing...";
+};
+</script>
+```
+
+### 6、模拟事件
+
+#### 6.1 DOM中的事件模拟

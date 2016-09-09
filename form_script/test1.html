@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单脚本</title>
+</head>
+<body>
+<form name="reginfo" method="post" action="">
+    name：<input type="text" name="name" tabindex="1"><br />
+    phone：<input type="text" name="phone" tabindex="5"><br />
+    address：<input type="text" name="address" tabindex="3"><br />
+    email：<input type="text" name="email" tabindex="4"><br />
+    <input type="radio" name="sex" value="男">
+    <input type="radio" name="sex" value="女">
+    <input type="radio" name="sex" value="无"><br />
+    <textarea cols="23" rows="5" name="ow"></textarea>
+    <input type="button" onclick="getINF()" value="按钮" />
+</form>
+<script type="text/javascript">
+    var form=document.getElementsByName("reginfo")[0];
+   
+    function getINF() { form.elements["ow"].select();
+        console.log(form.elements["sex"]);
+        console.log(form.elements.length);
+        for(var i = 0,len=form.elements.length; i < len; i++){
+            console.log(form.elements[i].value);
+        }
+    } 
+</script>
+</body>
+</html>
